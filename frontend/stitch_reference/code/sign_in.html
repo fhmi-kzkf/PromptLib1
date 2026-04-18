@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PROMPTLIB | AUTHENTICATION</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#e9c400",
+                        "on-tertiary-fixed-variant": "#8c1520",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f9f9f9",
+                        "on-primary-fixed-variant": "#544600",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#006f69",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#79f3ea",
+                        "secondary": "#006a65",
+                        "primary-container": "#ffd700",
+                        "on-surface-variant": "#4d4732",
+                        "surface-container-high": "#e8e8e8",
+                        "on-secondary-fixed": "#00201e",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#ae2f34",
+                        "inverse-on-surface": "#f1f1f1",
+                        "surface-variant": "#e2e2e2",
+                        "surface-tint": "#705d00",
+                        "inverse-surface": "#2f3131",
+                        "on-primary-fixed": "#221b00",
+                        "on-tertiary-container": "#ae3035",
+                        "outline": "#7e775f",
+                        "surface-dim": "#dadada",
+                        "on-primary": "#ffffff",
+                        "background": "#f9f9f9",
+                        "surface": "#f9f9f9",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdad8",
+                        "on-secondary-fixed-variant": "#00504c",
+                        "primary": "#705d00",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-container": "#eeeeee",
+                        "on-surface": "#1a1c1c",
+                        "tertiary-container": "#ffcecb",
+                        "primary-fixed": "#ffe16d",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#5dd9d0",
+                        "inverse-primary": "#e9c400",
+                        "tertiary-fixed-dim": "#ffb3b0",
+                        "secondary-fixed": "#7cf6ec",
+                        "on-tertiary-fixed": "#410006",
+                        "outline-variant": "#d0c6ab",
+                        "surface-container-low": "#f3f3f3",
+                        "on-primary-container": "#705e00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0rem",
+                        "lg": "0rem",
+                        "xl": "0rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #F4F4F4;
+            font-family: 'Inter', sans-serif;
+        }
+        .neo-shadow {
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+        }
+        .neo-shadow-hover:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
+        }
+        .neo-shadow-active:active {
+            transform: translate(0px, 0px);
+            box-shadow: 0px 0px 0px 0px rgba(0,0,0,1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#F4F4F4] text-on-surface min-h-screen flex flex-col items-center justify-center p-4">
+<!-- Top Branding Anchor (Suppressed Shell logic applied, rendering text only as Hero element) -->
+<header class="mb-12 text-center">
+<div class="flex items-center justify-center gap-2 mb-2">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<h1 class="text-6xl md:text-8xl font-headline font-black tracking-tighter uppercase text-black">
+                PROMPTLIB
+            </h1>
+</div>
+<p class="font-mono text-sm bg-secondary-container px-4 py-1 inline-block border-[2px] border-black font-bold uppercase">
+            System Identity Verified: v.4.0.2_INDUSTRIAL
+        </p>
+</header>
+<main class="w-full max-w-md relative">
+<!-- Background Decorative Element (The Asymmetry) -->
+<div class="absolute -top-4 -left-4 w-full h-full bg-secondary border-[4px] border-black z-0"></div>
+<!-- Main Auth Card -->
+<div class="relative z-10 bg-surface-bright border-[4px] border-black p-8 neo-shadow">
+<div class="mb-8">
+<h2 class="text-3xl font-headline font-black uppercase tracking-tight mb-2">Initialize Session</h2>
+<div class="h-1 w-20 bg-primary-container border-b-[2px] border-black"></div>
+</div>
+<form class="space-y-6">
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="block font-label font-bold text-sm uppercase tracking-wider" for="email">
+                        ARCHIVE_ID (EMAIL)
+                    </label>
+<div class="relative">
+<input class="w-full bg-white border-[4px] border-black p-4 font-mono text-sm focus:outline-none focus:bg-secondary-container/10 transition-colors placeholder:text-neutral-400" id="email" placeholder="OPERATOR@PROMPTLIB.IO" type="email"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined opacity-50">alternate_email</span>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<label class="block font-label font-bold text-sm uppercase tracking-wider" for="password">
+                        ACCESS_KEY (PASSWORD)
+                    </label>
+<div class="relative">
+<input class="w-full bg-white border-[4px] border-black p-4 font-mono text-sm focus:outline-none focus:bg-secondary-container/10 transition-colors placeholder:text-neutral-400" id="password" placeholder="••••••••••••" type="password"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined opacity-50">lock</span>
+</div>
+</div>
+<!-- Massive Action Button -->
+<button class="w-full bg-primary-container border-[4px] border-black py-5 px-6 neo-shadow neo-shadow-hover neo-shadow-active transition-all flex items-center justify-center gap-3 group" type="submit">
+<span class="text-2xl font-headline font-black uppercase tracking-tighter">SIGN IN</span>
+<span class="material-symbols-outlined text-3xl group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</button>
+</form>
+<!-- Footer Actions -->
+<div class="mt-10 flex flex-col gap-4">
+<div class="flex items-center gap-4">
+<div class="h-[2px] flex-grow bg-black"></div>
+<span class="font-mono text-[10px] font-bold opacity-60 uppercase">Manual Override</span>
+<div class="h-[2px] flex-grow bg-black"></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="bg-surface border-[2px] border-black py-3 px-4 font-label font-bold text-xs uppercase flex items-center justify-center gap-2 hover:bg-tertiary-container transition-colors">
+<span class="material-symbols-outlined text-lg">help</span>
+                        Forgot?
+                    </button>
+<button class="bg-surface border-[2px] border-black py-3 px-4 font-label font-bold text-xs uppercase flex items-center justify-center gap-2 hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-lg">person_add</span>
+                        Register
+                    </button>
+</div>
+</div>
+</div>
+<!-- System Metadata Decorations -->
+<div class="mt-8 flex justify-between items-start font-mono text-[10px] text-black/50 leading-relaxed uppercase">
+<div>
+                [STATUS: PENDING_AUTH]<br/>
+                [ENC: AES_256_GCM]<br/>
+                [LOC: NODE_882_ALPHA]
+            </div>
+<div class="text-right">
+                INDUSTRIAL ARCHIVE v4.0<br/>
+                AUTHORIZED ACCESS ONLY<br/>
+                © 2024 PROMPTLIB
+            </div>
+</div>
+</main>
+<!-- Visual Texture / Background Elements -->
+<div class="fixed top-12 right-12 w-32 h-32 opacity-10 pointer-events-none">
+<div class="w-full h-full border-[10px] border-black rotate-12"></div>
+</div>
+<div class="fixed bottom-12 left-12 w-48 h-48 opacity-10 pointer-events-none">
+<div class="w-full h-full border-[1px] border-black grid grid-cols-8 grid-rows-8">
+<div class="bg-black"></div><div></div><div class="bg-black"></div><div></div>
+<div class="bg-black"></div><div></div><div class="bg-black"></div><div></div>
+<div></div><div class="bg-black"></div><div></div><div class="bg-black"></div>
+<div></div><div class="bg-black"></div><div></div><div class="bg-black"></div>
+<div class="bg-black"></div><div></div><div class="bg-black"></div><div></div>
+<div class="bg-black"></div><div></div><div class="bg-black"></div><div></div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,44 @@
+# --- SYSTEM_IGNORE_MANIFEST ---
+
+# [ DATABASE_FILES ]
+*.sqlite
+*.db
+backend/writable/*.sqlite
+backend/writable/*.db
+
+# [ ENVIRONMENT_CONFIG ]
+.env
+backend/.env
+frontend/.env
+*.env.local
+*.env.*.local
+
+# [ CI4_BACKEND ]
+backend/vendor/
+backend/writable/cache/*
+backend/writable/debugbar/*
+backend/writable/logs/*
+backend/writable/session/*
+backend/writable/uploads/*
+!backend/writable/index.html
+!backend/writable/*/index.html
+
+# [ FLUTTER_FRONTEND ]
+frontend/.dart_tool/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.packages
+frontend/build/
+frontend/generated/
+frontend/node_modules/
+
+# [ IDE_CONFIG ]
+.vscode/
+.idea/
+*.swp
+*.log
+.DS_Store
+
+# [ TEMP_FILES ]
+/tmp/
+/scratch/

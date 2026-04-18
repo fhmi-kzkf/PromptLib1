@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PromptLib | Editor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#e9c400",
+                    "on-tertiary-fixed-variant": "#8c1520",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#f9f9f9",
+                    "on-primary-fixed-variant": "#544600",
+                    "on-error": "#ffffff",
+                    "on-secondary-container": "#006f69",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#79f3ea",
+                    "secondary": "#006a65",
+                    "primary-container": "#ffd700",
+                    "on-surface-variant": "#4d4732",
+                    "surface-container-high": "#e8e8e8",
+                    "on-secondary-fixed": "#00201e",
+                    "on-background": "#1a1c1c",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#ae2f34",
+                    "inverse-on-surface": "#f1f1f1",
+                    "surface-variant": "#e2e2e2",
+                    "surface-tint": "#705d00",
+                    "inverse-surface": "#2f3131",
+                    "on-primary-fixed": "#221b00",
+                    "on-tertiary-container": "#ae3035",
+                    "outline": "#7e775f",
+                    "surface-dim": "#dadada",
+                    "on-primary": "#ffffff",
+                    "background": "#f9f9f9",
+                    "surface": "#f9f9f9",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#ffdad8",
+                    "on-secondary-fixed-variant": "#00504c",
+                    "primary": "#705d00",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e2e2e2",
+                    "surface-container": "#eeeeee",
+                    "on-surface": "#1a1c1c",
+                    "tertiary-container": "#ffcecb",
+                    "primary-fixed": "#ffe16d",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed-dim": "#5dd9d0",
+                    "inverse-primary": "#e9c400",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "secondary-fixed": "#7cf6ec",
+                    "on-tertiary-fixed": "#410006",
+                    "outline-variant": "#d0c6ab",
+                    "surface-container-low": "#f3f3f3",
+                    "on-primary-container": "#705e00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0rem",
+                    "lg": "0rem",
+                    "xl": "0rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Space Grotesk"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neo-shadow {
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+        }
+        .neo-shadow-hover:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
+        }
+        .neo-shadow-active:active {
+            transform: translate(0px, 0px);
+            box-shadow: 0px 0px 0px 0px rgba(0,0,0,1);
+        }
+        .neon-glow {
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,1), 0 0 15px rgba(78, 205, 196, 0.4);
+        }
+        .neon-glow:hover {
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,1), 0 0 25px rgba(78, 205, 196, 0.6);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full border-b-[4px] border-black z-50 flex items-center justify-between px-6 h-24 bg-[#F4F4F4] dark:bg-stone-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl text-black dark:text-white" data-icon="terminal">terminal</span>
+<h1 class="font-['Space_Grotesk'] font-black uppercase tracking-tighter text-4xl text-black dark:text-white tracking-[-0.04em]">PROMPTLIB</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8 font-['Space_Grotesk'] font-bold text-sm tracking-widest uppercase">
+<a class="text-black dark:text-white opacity-70 hover:opacity-100 transition-opacity" href="#">DASHBOARD</a>
+<a class="text-[#4ECDC4]" href="#">EDITOR</a>
+<a class="text-black dark:text-white opacity-70 hover:opacity-100 transition-opacity" href="#">ARCHIVE</a>
+<a class="text-black dark:text-white opacity-70 hover:opacity-100 transition-opacity" href="#">SETTINGS</a>
+</nav>
+<div class="w-12 h-12 border-[3px] border-black overflow-hidden bg-primary-container neo-shadow">
+<img alt="User Profile" data-alt="Stylized pixel art avatar of a professional designer with glasses and a headset in a high-contrast industrial style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoP5NBDtMldwwzbA8P-UPi_MjIFb2AAOLPP1PSf9keA23Biua1M1ZVzERiXpUypg_EW0zld77DVgUwVafsGiJl6LDoBmcXJ7dnTXmYKpKl5Fm8GQuzzixDuR4BRdwyqD_nRAH5HNS8Klu-5ctj_nT6SnU334ZwpH2t82p6yKCnxglmFQp-C61NZibBxyk_tpi8iZTq9lxHSQH6eQV-0U_gCzAkCPAPv8ayxwKivpIqKqRU4RhVGdVS9W1Hvoz3is2aEGiJE8fD84fB"/>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-24 px-6 max-w-7xl mx-auto grid grid-cols-12 gap-8">
+<!-- Sidebar Controls: Bento Style -->
+<aside class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<!-- Project Metadata Card -->
+<div class="bg-surface border-[4px] border-black p-6 neo-shadow">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-secondary-container border-[2px] border-black px-2 py-1 text-[10px] font-black uppercase">NEW_ENTRY</span>
+</div>
+<label class="block font-headline font-bold text-lg mb-2 uppercase tracking-tight">PROMPT_TITLE</label>
+<input class="w-full bg-white border-[4px] border-black p-3 font-mono text-sm focus:ring-0 focus:bg-secondary-container/10 transition-colors outline-none mb-6" type="text" value="NEO-INDUSTRIAL_ARCHITECT"/>
+<label class="block font-headline font-bold text-lg mb-2 uppercase tracking-tight">CATEGORY</label>
+<div class="flex flex-wrap gap-2">
+<span class="border-[2px] border-black bg-secondary px-3 py-1 text-white font-bold text-xs uppercase cursor-pointer hover:bg-black transition-colors">VISUAL_GEN</span>
+<span class="border-[2px] border-black bg-surface-container-high px-3 py-1 text-black font-bold text-xs uppercase cursor-pointer hover:bg-secondary-fixed-dim transition-colors">CODING</span>
+<span class="border-[2px] border-black bg-surface-container-high px-3 py-1 text-black font-bold text-xs uppercase cursor-pointer hover:bg-secondary-fixed-dim transition-colors">COPYWRITING</span>
+</div>
+</div>
+<!-- Parameters Card -->
+<div class="bg-surface-container-low border-[4px] border-black p-6 neo-shadow">
+<h2 class="font-headline font-black text-2xl mb-6 uppercase tracking-tighter italic border-b-[4px] border-black pb-2">ENGINE_SETTINGS</h2>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between mb-2">
+<label class="font-headline font-bold text-sm uppercase">TEMPERATURE</label>
+<span class="font-mono text-sm font-bold">0.85</span>
+</div>
+<input class="w-full h-4 bg-surface-container-highest border-[2px] border-black appearance-none cursor-pointer accent-black" type="range"/>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<label class="font-headline font-bold text-sm uppercase">TOP_P</label>
+<span class="font-mono text-sm font-bold">1.0</span>
+</div>
+<input class="w-full h-4 bg-surface-container-highest border-[2px] border-black appearance-none cursor-pointer accent-black" type="range"/>
+</div>
+<div class="flex items-center justify-between border-t-[2px] border-black pt-4">
+<label class="font-headline font-bold text-sm uppercase">STRICT_MODE</label>
+<button class="w-12 h-6 border-[2px] border-black bg-black flex items-center px-1">
+<div class="w-4 h-4 bg-primary-container"></div>
+</button>
+</div>
+</div>
+</div>
+<!-- Model Selector -->
+<div class="bg-primary-container border-[4px] border-black p-6 neo-shadow">
+<h2 class="font-headline font-black text-2xl mb-4 uppercase tracking-tighter">MODEL_DEPLOYMENT</h2>
+<div class="space-y-2">
+<button class="w-full flex items-center justify-between p-3 border-[3px] border-black bg-white font-headline font-bold hover:bg-secondary-fixed-dim transition-colors text-left">
+<span>GEMINI 1.5 PRO</span>
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 border-[3px] border-black bg-surface-container-highest opacity-50 font-headline font-bold text-left cursor-not-allowed">
+<span>GPT-4_TURBO</span>
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Editor Section -->
+<section class="col-span-12 lg:col-span-8 flex flex-col gap-6">
+<!-- Code Editor Area -->
+<div class="bg-surface border-[4px] border-black neo-shadow flex flex-col min-h-[600px]">
+<div class="bg-black text-white px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 bg-tertiary"></span>
+<span class="w-3 h-3 bg-primary-container"></span>
+<span class="w-3 h-3 bg-secondary"></span>
+<span class="ml-4 font-mono text-xs font-bold tracking-widest opacity-70">MAIN_EDITOR.MD</span>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-xl cursor-pointer hover:text-secondary-fixed-dim" data-icon="content_copy">content_copy</span>
+<span class="material-symbols-outlined text-xl cursor-pointer hover:text-secondary-fixed-dim" data-icon="history">history</span>
+</div>
+</div>
+<div class="flex-grow relative bg-[#1a1c1c]">
+<div class="absolute left-0 top-0 w-12 h-full bg-stone-800 border-r-[1px] border-stone-700 flex flex-col items-center py-4 font-mono text-xs text-stone-500 select-none">
+<span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span><span>08</span><span>09</span><span>10</span>
+</div>
+<textarea class="w-full h-full bg-transparent border-none text-secondary-fixed p-6 pl-16 font-mono text-lg resize-none focus:ring-0 leading-relaxed outline-none" spellcheck="false"># System Persona
+You are a Neo-Industrial Architect specializing in brutalist structures and automated assembly pipelines.
+
+# Core Directive
+Synthesize complex structural requirements into minimalist blueprints that prioritize raw materiality and functional honesty.
+
+# Constraints
+1. No decorative flourishes.
+2. Every joint must be visible.
+3. Use Cyber-Yellow accents for all safety-critical points.</textarea>
+</div>
+<div class="border-t-[4px] border-black p-6 flex flex-col sm:flex-row items-center justify-between bg-white gap-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-secondary animate-pulse"></div>
+<span class="font-mono text-[10px] font-bold text-black uppercase opacity-60">Status: Listening to stream...</span>
+</div>
+<div class="flex gap-4 w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-8 py-4 border-[4px] border-black bg-[#4ECDC4] font-headline font-black text-black uppercase neo-shadow-hover neo-shadow-active neon-glow flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined font-bold" data-icon="bolt">bolt</span>
+                            REFINE WITH GEMINI
+                        </button>
+<button class="flex-1 sm:flex-none px-8 py-4 border-[4px] border-black bg-primary-container font-headline font-black text-black uppercase neo-shadow-hover neo-shadow-active flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined font-bold" data-icon="save">save</span>
+                            COMMIT_CHANGES
+                        </button>
+</div>
+</div>
+</div>
+<!-- Context Library / Snippets -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="border-[4px] border-black p-4 bg-tertiary-container neo-shadow relative group overflow-hidden">
+<div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="data_object">data_object</span>
+</div>
+<h4 class="font-headline font-black text-lg mb-2 uppercase">VARIABLE_INJECTOR</h4>
+<p class="text-sm font-bold opacity-70 mb-4 font-headline">Inject dynamic user data into the system prompt structure.</p>
+<button class="w-full border-[2px] border-black py-2 font-mono text-xs font-bold uppercase hover:bg-black hover:text-white transition-colors">LOAD_TEMPLATE</button>
+</div>
+<div class="border-[4px] border-black p-4 bg-secondary-container neo-shadow relative group overflow-hidden">
+<div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="psychology">psychology</span>
+</div>
+<h4 class="font-headline font-black text-lg mb-2 uppercase">REASONING_CHAIN</h4>
+<p class="text-sm font-bold opacity-70 mb-4 font-headline">Force the model to think step-by-step using XML tags.</p>
+<button class="w-full border-[2px] border-black py-2 font-mono text-xs font-bold uppercase hover:bg-black hover:text-white transition-colors">ACTIVATE_BLOCK</button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full h-20 flex justify-around items-stretch bg-[#F4F4F4] dark:bg-stone-900 border-t-[4px] border-black z-50 md:hidden">
+<button class="flex flex-col items-center justify-center text-black dark:text-white opacity-70 flex-1 hover:bg-[#4ECDC4] transition-colors">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-['Space_Grotesk'] font-bold text-[10px] uppercase">DASHBOARD</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-[#FFD700] text-black border-l-[4px] border-r-[4px] border-black flex-1">
+<span class="material-symbols-outlined" data-icon="edit_note" style="font-variation-settings: 'FILL' 1;">edit_note</span>
+<span class="font-['Space_Grotesk'] font-bold text-[10px] uppercase">EDITOR</span>
+</button>
+<button class="flex flex-col items-center justify-center text-black dark:text-white opacity-70 flex-1 hover:bg-[#4ECDC4] transition-colors">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-['Space_Grotesk'] font-bold text-[10px] uppercase">ARCHIVE</span>
+</button>
+<button class="flex flex-col items-center justify-center text-black dark:text-white opacity-70 flex-1 hover:bg-[#4ECDC4] transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Space_Grotesk'] font-bold text-[10px] uppercase">SETTINGS</span>
+</button>
+</nav>
+<!-- Floating Action Button - Supressed for Editor View per guidelines -->
+</body></html>

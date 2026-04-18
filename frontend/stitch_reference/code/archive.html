@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface": "#1a1c1c",
+                    "outline-variant": "#d0c6ab",
+                    "on-primary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#e2e2e2",
+                    "on-secondary-container": "#006f69",
+                    "on-background": "#1a1c1c",
+                    "inverse-primary": "#e9c400",
+                    "inverse-surface": "#2f3131",
+                    "on-tertiary-container": "#ae3035",
+                    "secondary-fixed": "#7cf6ec",
+                    "surface-dim": "#dadada",
+                    "primary": "#705d00",
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#ae2f34",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#eeeeee",
+                    "primary-container": "#ffd700",
+                    "on-tertiary-fixed": "#410006",
+                    "surface-container-high": "#e8e8e8",
+                    "secondary-fixed-dim": "#5dd9d0",
+                    "secondary-container": "#79f3ea",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#ffe16d",
+                    "tertiary-container": "#ffcecb",
+                    "surface-tint": "#705d00",
+                    "inverse-on-surface": "#f1f1f1",
+                    "secondary": "#006a65",
+                    "on-secondary-fixed-variant": "#00504c",
+                    "on-primary-fixed-variant": "#544600",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "on-surface-variant": "#4d4732",
+                    "on-secondary-fixed": "#00201e",
+                    "primary-fixed-dim": "#e9c400",
+                    "on-tertiary-fixed-variant": "#8c1520",
+                    "outline": "#7e775f",
+                    "error-container": "#ffdad6",
+                    "surface": "#f9f9f9",
+                    "surface-bright": "#f9f9f9",
+                    "surface-container-low": "#f3f3f3",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#705e00",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-primary-fixed": "#221b00",
+                    "tertiary-fixed": "#ffdad8",
+                    "background": "#f9f9f9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Space Grotesk"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .neo-shadow { shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#F4F4F4] text-black">
+<!-- TopAppBar -->
+<header class="bg-[#F4F4F4] dark:bg-zinc-900 flex justify-between items-center px-6 py-4 w-full sticky top-0 z-50 border-b-4 border-black dark:border-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-3xl">menu</span>
+<h1 class="text-3xl font-black text-black dark:text-white tracking-tighter italic font-['Space_Grotesk'] uppercase">ARCHIVE_VAULT</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary-container border-2 border-black flex items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+</div>
+</header>
+<main class="p-6 md:p-12 mb-24 max-w-7xl mx-auto">
+<!-- Search Section -->
+<section class="mb-12">
+<div class="relative group">
+<div class="absolute -inset-1 bg-black translate-x-1 translate-y-1 group-hover:translate-x-2 group-hover:translate-y-2 transition-all"></div>
+<div class="relative flex items-center bg-white border-4 border-black p-4">
+<span class="material-symbols-outlined mr-4 text-zinc-400" data-icon="search">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 font-mono text-lg uppercase placeholder-zinc-400" placeholder="FILTER_ARCHIVED_PROMPTS..." type="text"/>
+<button class="bg-[#FFD700] border-l-4 border-black px-8 py-2 font-['Space_Grotesk'] font-black hover:bg-[#4ECDC4] transition-colors">SEARCH</button>
+</div>
+</div>
+</section>
+<!-- Bento Grid List -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<article class="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col relative">
+<div class="absolute -top-4 -left-4 bg-[#4ECDC4] border-2 border-black px-3 py-1 font-['Space_Grotesk'] font-bold text-xs">
+                    GEMINI 1.5 PRO
+                </div>
+<div class="p-6 border-b-4 border-black">
+<h3 class="font-['Space_Grotesk'] font-black text-2xl uppercase leading-tight mb-2">SYSTEM_ARCHITECTURE_V4</h3>
+<div class="flex justify-between items-center text-xs font-mono opacity-60">
+<span>ARCHIVED: 2023_OCT_12</span>
+<span class="bg-zinc-100 px-2 py-0.5 border border-black">98.4% EFF</span>
+</div>
+</div>
+<div class="p-6 bg-zinc-50 flex-grow font-mono text-sm line-clamp-3">
+                    Establish a secure, high-latency-resistant infrastructure for real-time data processing using distributed edge nodes...
+                </div>
+<div class="grid grid-cols-2">
+<button class="bg-[#FFD700] p-4 font-['Space_Grotesk'] font-black border-r-4 border-t-4 border-black hover:bg-[#4ECDC4] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">unarchive</span> RESTORE
+                    </button>
+<button class="bg-[#FF6B6B] p-4 font-['Space_Grotesk'] font-black border-t-4 border-black hover:invert transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">delete</span> DELETE
+                    </button>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col relative">
+<div class="absolute -top-4 -left-4 bg-[#4ECDC4] border-2 border-black px-3 py-1 font-['Space_Grotesk'] font-bold text-xs">
+                    GPT-4O_TURBO
+                </div>
+<div class="p-6 border-b-4 border-black">
+<h3 class="font-['Space_Grotesk'] font-black text-2xl uppercase leading-tight mb-2">NEO_BRUTAL_GEN_SCRIPT</h3>
+<div class="flex justify-between items-center text-xs font-mono opacity-60">
+<span>ARCHIVED: 2023_NOV_01</span>
+<span class="bg-zinc-100 px-2 py-0.5 border border-black">92.1% EFF</span>
+</div>
+</div>
+<div class="p-6 bg-zinc-50 flex-grow font-mono text-sm line-clamp-3">
+                    Write a CSS generation script that strictly enforces 4px solid borders and eliminates all border-radius properties...
+                </div>
+<div class="grid grid-cols-2">
+<button class="bg-[#FFD700] p-4 font-['Space_Grotesk'] font-black border-r-4 border-t-4 border-black hover:bg-[#4ECDC4] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">unarchive</span> RESTORE
+                    </button>
+<button class="bg-[#FF6B6B] p-4 font-['Space_Grotesk'] font-black border-t-4 border-black hover:invert transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">delete</span> DELETE
+                    </button>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col relative">
+<div class="absolute -top-4 -left-4 bg-[#4ECDC4] border-2 border-black px-3 py-1 font-['Space_Grotesk'] font-bold text-xs">
+                    CLAUDE 3.5 SONNET
+                </div>
+<div class="p-6 border-b-4 border-black">
+<h3 class="font-['Space_Grotesk'] font-black text-2xl uppercase leading-tight mb-2">FINANCIAL_ANALYST_PERSONA</h3>
+<div class="flex justify-between items-center text-xs font-mono opacity-60">
+<span>ARCHIVED: 2024_JAN_15</span>
+<span class="bg-zinc-100 px-2 py-0.5 border border-black">99.0% EFF</span>
+</div>
+</div>
+<div class="p-6 bg-zinc-50 flex-grow font-mono text-sm line-clamp-3">
+                    You are a veteran Wall Street analyst specializing in high-frequency trading anomalies and emerging market trends...
+                </div>
+<div class="grid grid-cols-2">
+<button class="bg-[#FFD700] p-4 font-['Space_Grotesk'] font-black border-r-4 border-t-4 border-black hover:bg-[#4ECDC4] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">unarchive</span> RESTORE
+                    </button>
+<button class="bg-[#FF6B6B] p-4 font-['Space_Grotesk'] font-black border-t-4 border-black hover:invert transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">delete</span> DELETE
+                    </button>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col relative">
+<div class="absolute -top-4 -left-4 bg-[#4ECDC4] border-2 border-black px-3 py-1 font-['Space_Grotesk'] font-bold text-xs">
+                    LLAMA 3-70B
+                </div>
+<div class="p-6 border-b-4 border-black">
+<h3 class="font-['Space_Grotesk'] font-black text-2xl uppercase leading-tight mb-2">SQL_QUERY_OPTIMIZER</h3>
+<div class="flex justify-between items-center text-xs font-mono opacity-60">
+<span>ARCHIVED: 2024_FEB_28</span>
+<span class="bg-zinc-100 px-2 py-0.5 border border-black">88.5% EFF</span>
+</div>
+</div>
+<div class="p-6 bg-zinc-50 flex-grow font-mono text-sm line-clamp-3">
+                    Analyze the following PostgreSQL execution plan and suggest indexing strategies to reduce sequential scans...
+                </div>
+<div class="grid grid-cols-2">
+<button class="bg-[#FFD700] p-4 font-['Space_Grotesk'] font-black border-r-4 border-t-4 border-black hover:bg-[#4ECDC4] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">unarchive</span> RESTORE
+                    </button>
+<button class="bg-[#FF6B6B] p-4 font-['Space_Grotesk'] font-black border-t-4 border-black hover:invert transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">delete</span> DELETE
+                    </button>
+</div>
+</article>
+<!-- Card 5 -->
+<article class="bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col relative">
+<div class="absolute -top-4 -left-4 bg-[#4ECDC4] border-2 border-black px-3 py-1 font-['Space_Grotesk'] font-bold text-xs">
+                    GEMINI 1.5 PRO
+                </div>
+<div class="p-6 border-b-4 border-black">
+<h3 class="font-['Space_Grotesk'] font-black text-2xl uppercase leading-tight mb-2">CREATIVE_WRITING_MODULE</h3>
+<div class="flex justify-between items-center text-xs font-mono opacity-60">
+<span>ARCHIVED: 2024_MAR_02</span>
+<span class="bg-zinc-100 px-2 py-0.5 border border-black">95.2% EFF</span>
+</div>
+</div>
+<div class="p-6 bg-zinc-50 flex-grow font-mono text-sm line-clamp-3">
+                    Generate a scene set in a dystopian library where books are considered illegal biological hazards...
+                </div>
+<div class="grid grid-cols-2">
+<button class="bg-[#FFD700] p-4 font-['Space_Grotesk'] font-black border-r-4 border-t-4 border-black hover:bg-[#4ECDC4] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">unarchive</span> RESTORE
+                    </button>
+<button class="bg-[#FF6B6B] p-4 font-['Space_Grotesk'] font-black border-t-4 border-black hover:invert transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">delete</span> DELETE
+                    </button>
+</div>
+</article>
+<!-- Empty Slot / Action -->
+<div class="border-4 border-dashed border-black flex flex-col items-center justify-center p-12 bg-zinc-100/50 group hover:bg-[#FFD700]/10 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-6xl mb-4 text-zinc-300 group-hover:text-black transition-colors" data-icon="inventory_2">inventory_2</span>
+<p class="font-['Space_Grotesk'] font-black uppercase text-zinc-400 group-hover:text-black">BULK_EXPORT_VAULT</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 h-20 flex justify-around items-stretch bg-[#F4F4F4] dark:bg-zinc-900 border-t-4 border-black dark:border-white">
+<div class="flex flex-col items-center justify-center text-black dark:text-white p-2 h-full opacity-60 hover:bg-[#4ECDC4] cursor-pointer flex-1 transition-all">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Space_Grotesk'] font-bold text-[10px] uppercase">HOME</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#FFD700] text-black p-2 border-x-2 border-black h-full flex-1 translate-y-[-4px] transition-transform">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-['Space_Grotesk'] font-bold text-[10px] uppercase">ARCHIVE</span>
+</div>
+<div class="flex flex-col items-center justify-center text-black dark:text-white p-2 h-full opacity-60 hover:bg-[#4ECDC4] cursor-pointer flex-1 transition-all">
+<span class="material-symbols-outlined" data-icon="add_box">add_box</span>
+<span class="font-['Space_Grotesk'] font-bold text-[10px] uppercase">BUILD</span>
+</div>
+<div class="flex flex-col items-center justify-center text-black dark:text-white p-2 h-full opacity-60 hover:bg-[#4ECDC4] cursor-pointer flex-1 transition-all">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-['Space_Grotesk'] font-bold text-[10px] uppercase">INTEL</span>
+</div>
+</nav>
+</body></html>
