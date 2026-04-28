@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../theme/brutalist_theme.dart';
 
 class BottomNavArchivist extends StatelessWidget {
@@ -14,15 +15,14 @@ class BottomNavArchivist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
+      height: 90,
       decoration: const BoxDecoration(
-        color: BrutalistColors.background,
+        color: Colors.white,
         border: Border(
-          top: BorderSide(color: BrutalistColors.black, width: 4),
+          top: BorderSide(color: BrutalistColors.black, width: 3),
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _NavItem(
             icon: Icons.grid_view_rounded,
@@ -37,16 +37,22 @@ class BottomNavArchivist extends StatelessWidget {
             onTap: () => onTap(1),
           ),
           _NavItem(
-            icon: Icons.inventory_2_rounded,
-            label: 'ARCHIVE',
+            icon: Icons.emoji_events_rounded,
+            label: 'BATTLE',
             isActive: currentIndex == 2,
             onTap: () => onTap(2),
           ),
           _NavItem(
-            icon: Icons.settings_rounded,
-            label: 'SETTINGS',
+            icon: Icons.inventory_2_rounded,
+            label: 'ARCHIVE',
             isActive: currentIndex == 3,
             onTap: () => onTap(3),
+          ),
+          _NavItem(
+            icon: Icons.settings_rounded,
+            label: 'SETTINGS',
+            isActive: currentIndex == 4,
+            onTap: () => onTap(4),
           ),
         ],
       ),
@@ -74,11 +80,12 @@ class _NavItem extends StatelessWidget {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            color: isActive ? BrutalistColors.primary : Colors.transparent,
-            border: Border.symmetric(
-              vertical: BorderSide(
+            color: isActive ? BrutalistColors.primaryContainer : Colors.transparent,
+            border: Border(
+              right: const BorderSide(color: BrutalistColors.black, width: 1.5),
+              bottom: BorderSide(
                 color: isActive ? BrutalistColors.black : Colors.transparent,
-                width: 2,
+                width: 4,
               ),
             ),
           ),
@@ -88,16 +95,18 @@ class _NavItem extends StatelessWidget {
               Icon(
                 icon,
                 color: BrutalistColors.black,
-                size: 28,
+                size: isActive ? 32 : 24,
               ),
               const SizedBox(height: 4),
-              Text(
-                label,
-                style: TextStyle(
-                  fontFamily: 'SpaceGrotesk',
-                  fontWeight: FontWeight.w900,
-                  fontSize: 10,
-                  color: BrutalistColors.black.withOpacity(isActive ? 1.0 : 0.6),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  style: GoogleFonts.spaceGrotesk(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 10,
+                    color: BrutalistColors.black,
+                  ),
                 ),
               ),
             ],

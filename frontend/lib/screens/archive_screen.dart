@@ -14,92 +14,65 @@ class ArchiveScreen extends StatefulWidget {
 }
 
 class _ArchiveScreenState extends State<ArchiveScreen> {
-  late Future<List<Prompt>> _archivedPromptsFuture;
+  late Future<List<Prompt>> _archivedFuture;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _refreshArchivedPrompts();
+    _refreshArchived();
   }
 
-  void _refreshArchivedPrompts() {
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _refreshArchived() {
     setState(() {
-      _archivedPromptsFuture = ApiService().getPrompts(archived: true);
+      _archivedFuture = ApiService().getPrompts(archived: true);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header (Archive Vault Style)
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.inventory_2_rounded, size: 32),
-                  const SizedBox(width: 12),
-                  Text(
-                    'ARCHIVE_VAULT',
-                    style: GoogleFonts.spaceGrotesk(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 32,
-                      letterSpacing: -2,
-                      fontStyle: FontStyle.italic,
-                      color: BrutalistColors.black,
-                    ),
-                  ),
-                ],
+              Text(
+                'ARCHIVE_VAULT',
+                style: GoogleFonts.spaceGrotesk(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 48,
+                  letterSpacing: -2,
+                  color: BrutalistColors.black,
+                ),
               ),
-              const CircleAvatar(
-                backgroundColor: BrutalistColors.primary,
-                child: Icon(Icons.person, color: BrutalistColors.black),
+              const SizedBox(height: 12),
+              const IndustrialChip(
+                text: 'RESTRICTED ACCESS',
+                color: BrutalistColors.secondary,
+              ),
+              const SizedBox(height: 24),
+              IndustrialInput(
+                label: 'FILTER_VAULT',
+                hint: 'SEARCH_ARCHIVE...',
+                controller: _searchController,
+                onChanged: (value) => setState(() => _searchQuery = value.toLowerCase()),
               ),
             ],
           ),
         ),
-
-        // Search Bar
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Container(
-            decoration: BrutalistTheme.getShadowDecoration(color: Colors.white),
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                const Icon(Icons.search, color: Colors.grey),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'FILTER_ARCHIVED_PROMPTS...',
-                    style: GoogleFonts.jetBrainsMono(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-                Container(
-                  color: BrutalistColors.primary,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Text(
-                    'SEARCH',
-                    style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w900),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 32),
-
-        // Archive Content
         Expanded(
           child: FutureBuilder<List<Prompt>>(
-            future: _archivedPromptsFuture,
+            future: _archivedFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -107,80 +80,86 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
+              final prompts = (snapshot.data ?? []).where((p) {
+                return p.title.toLowerCase().contains(_searchQuery) ||
+                       p.content.toLowerCase().contains(_searchQuery);
+              }).toList();
 
-              final prompts = snapshot.data ?? [];
               if (prompts.isEmpty) {
                 return _buildEmptyState();
               }
 
-              return MasonryGridView.count(
+              return ListView.separated(
                 padding: const EdgeInsets.fromLTRB(24, 0, 24, 100),
-                crossAxisCount: 2,
-                mainAxisSpacing: 24,
-                crossAxisSpacing: 24,
                 itemCount: prompts.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 16),
                 itemBuilder: (context, index) {
                   final prompt = prompts[index];
-                  return BentoCard(
-                    title: prompt.title,
-                    backgroundColor: Colors.white,
-                    tag: prompt.aiModel.toUpperCase(),
-                    tagColor: BrutalistColors.secondary,
+                  return Container(
+                    decoration: BrutalistTheme.getNakedDecoration(color: BrutalistColors.surfaceVariant),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: const BoxDecoration(
+                            border: Border(bottom: BorderSide(color: BrutalistColors.black, width: 2)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'ARCHIVED: 2024_APR_18',
-                                    style: GoogleFonts.jetBrainsMono(
-                                      fontSize: 8,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black45,
-                                    ),
-                                  ),
-                                  const IndustrialChip(text: '98% EFF', color: BrutalistColors.concrete),
-                                ],
+                              Expanded(
+                                child: Text(
+                                  prompt.title.toUpperCase(),
+                                  style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w900),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                              const SizedBox(height: 12),
-                              Text(
-                                prompt.content,
-                                style: GoogleFonts.jetBrainsMono(fontSize: 12),
-                                maxLines: 5,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              const SizedBox(width: 8),
+                              IndustrialChip(text: prompt.category, color: Colors.white),
                             ],
                           ),
                         ),
-                        // Actions
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _ArchiveActionButton(
-                                text: 'RESTORE',
-                                icon: Icons.unarchive_rounded,
-                                color: BrutalistColors.primary,
-                                onPressed: () {
-                                  if (prompt.id != null) _restorePrompt(prompt.id!);
-                                },
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            prompt.content,
+                            style: GoogleFonts.jetBrainsMono(fontSize: 12),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: const BoxDecoration(
+                            color: BrutalistColors.black,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Flexible(
+                                child: ActionBlockButton(
+                                  text: 'RESTORE',
+                                  color: BrutalistColors.primaryContainer,
+                                  onPressed: () async {
+                                    await ApiService().restorePrompt(prompt.id!);
+                                    _refreshArchived();
+                                  },
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: _ArchiveActionButton(
-                                text: 'DELETE',
-                                icon: Icons.delete_forever_rounded,
-                                color: BrutalistColors.tertiary,
-                                onPressed: () {
-                                  if (prompt.id != null) _deletePrompt(prompt.id!);
-                                },
+                              const SizedBox(width: 12),
+                              Flexible(
+                                child: ActionBlockButton(
+                                  text: 'PURGE',
+                                  color: BrutalistColors.error,
+                                  onPressed: () async {
+                                    await ApiService().deletePrompt(prompt.id!);
+                                    _refreshArchived();
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -202,7 +181,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
           const Opacity(opacity: 0.1, child: Icon(Icons.inventory_2_outlined, size: 80)),
           const SizedBox(height: 24),
           Text(
-            'VAULT_IS_EMPTY',
+            'VAULT_EMPTY',
             style: GoogleFonts.spaceGrotesk(
               fontWeight: FontWeight.w900,
               fontSize: 24,
@@ -213,69 +192,5 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
       ),
     );
   }
-
-  Future<void> _restorePrompt(int id) async {
-    final success = await ApiService().restorePrompt(id);
-    if (success) {
-      _refreshArchivedPrompts();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('PROMPT RESTORED TO TERMINAL')),
-      );
-    }
-  }
-
-  Future<void> _deletePrompt(int id) async {
-    final success = await ApiService().deletePrompt(id);
-    if (success) {
-      _refreshArchivedPrompts();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('RECORDS PERMANENTLY PURGED')),
-      );
-    }
-  }
 }
 
-class _ArchiveActionButton extends StatelessWidget {
-  final String text;
-  final IconData icon;
-  final Color color;
-  final VoidCallback onPressed;
-
-  const _ArchiveActionButton({
-    required this.text,
-    required this.icon,
-    required this.color,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed,
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          color: color,
-          border: const Border(
-            top: BorderSide(color: BrutalistColors.black, width: 4),
-            right: BorderSide(color: BrutalistColors.black, width: 2),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 18, color: BrutalistColors.black),
-            const SizedBox(width: 8),
-            Text(
-              text,
-              style: GoogleFonts.spaceGrotesk(
-                fontWeight: FontWeight.w900,
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

@@ -4,11 +4,13 @@ import '../models/prompt_model.dart';
 import '../services/api_service.dart';
 import '../widgets/brutalist_widgets.dart';
 import '../theme/brutalist_theme.dart';
+import '../services/user_session.dart';
 
 class PromptEditorScreen extends StatefulWidget {
   final Prompt? prompt;
+  final int? competitionId; // Added for submissions
 
-  const PromptEditorScreen({super.key, this.prompt});
+  const PromptEditorScreen({super.key, this.prompt, this.competitionId});
 
   @override
   State<PromptEditorScreen> createState() => _PromptEditorScreenState();
@@ -33,13 +35,17 @@ class _PromptEditorScreenState extends State<PromptEditorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isAdmin = UserSession().rank?.toUpperCase() == 'ADMIN';
+    final bool canCommit = isAdmin; 
     final isEditing = widget.prompt != null;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 900;
 
     return Scaffold(
       backgroundColor: BrutalistColors.background,
       appBar: AppBar(
         title: Text(
-          isEditing ? 'MODIFY_RECORD' : 'NEW_RECORD',
+          !canCommit ? 'VIEW_RECORD (READ-ONLY)' : (isEditing ? 'MODIFY_RECORD' : 'ADD PROMPT'),
           style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w900),
         ),
         backgroundColor: Colors.transparent,
@@ -51,91 +57,173 @@ class _PromptEditorScreenState extends State<PromptEditorScreen> {
             )
           : null,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            IndustrialInput(
-              controller: _titleController,
-              label: 'IDENTIFIER (TITLE)',
-              hint: 'e.g. SYSTEM_GEN_V1',
-            ),
-            const SizedBox(height: 24),
-            IndustrialInput(
-              controller: _categoryController,
-              label: 'CLASSIFICATION (CATEGORY)',
-              hint: 'e.g. TECHNICAL, CREATIVE',
-            ),
-            const SizedBox(height: 24),
-            Stack(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'PROMPT_PAYLOAD',
-                      style: GoogleFonts.spaceGrotesk(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      decoration: BrutalistTheme.getNakedDecoration(),
-                      child: TextField(
-                        controller: _contentController,
-                        maxLines: 12,
-                        style: GoogleFonts.jetBrainsMono(fontWeight: FontWeight.bold),
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(16),
-                          border: InputBorder.none,
-                          fillColor: Colors.white,
-                          filled: true,
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Main Content Area
+          Expanded(
+            flex: 3,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: IndustrialInput(
+                          controller: _titleController,
+                          label: 'IDENTIFIER',
+                          hint: 'e.g. SYSTEM_GEN_V1',
+                          readOnly: !canCommit,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Positioned(
-                  top: 36,
-                  right: 12,
-                  child: ActionBlockButton(
-                    text: 'REFINE',
-                    color: BrutalistColors.secondary,
-                    onPressed: _isRefining ? () {} : _refinePrompt,
+                      if (isDesktop) const SizedBox(width: 24),
+                      if (isDesktop)
+                        Expanded(
+                          child: IndustrialInput(
+                            controller: _categoryController,
+                            label: 'CLASSIFICATION',
+                            hint: 'e.g. TECHNICAL',
+                            readOnly: !canCommit,
+                          ),
+                        ),
+                    ],
                   ),
-                ),
-              ],
+                  if (!isDesktop) const SizedBox(height: 24),
+                  if (!isDesktop)
+                    IndustrialInput(
+                      controller: _categoryController,
+                      label: 'CLASSIFICATION',
+                      hint: 'e.g. TECHNICAL',
+                      readOnly: !canCommit,
+                    ),
+                  const SizedBox(height: 32),
+                  
+                  // Prompt Payload Box
+                  Container(
+                    decoration: BrutalistTheme.getShadowDecoration(color: Colors.white),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: const BoxDecoration(
+                            color: BrutalistColors.black,
+                            border: Border(bottom: BorderSide(color: Colors.white, width: 1)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'PROMPT_PAYLOAD',
+                                  style: GoogleFonts.spaceGrotesk(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              IndustrialChip(
+                                text: 'UTF-8',
+                                color: BrutalistColors.primaryContainer,
+                              ),
+                            ],
+                          ),
+                        ),
+                        TextField(
+                          controller: _contentController,
+                          maxLines: 15,
+                          // Content is ALWAYS editable locally so users can tweak it
+                          style: GoogleFonts.jetBrainsMono(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: BrutalistColors.black,
+                          ),
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.all(20),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: const BoxDecoration(
+                            border: Border(top: BorderSide(color: BrutalistColors.black, width: 2)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // EVERYONE can use REFINE WITH AI
+                              ActionBlockButton(
+                                text: 'REFINE WITH AI',
+                                color: BrutalistColors.secondary,
+                                icon: Icons.auto_awesome,
+                                onPressed: _isRefining ? () {} : _refinePrompt,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  if (canCommit)
+                    Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      children: [
+                        ActionBlockButton(
+                          text: isEditing ? 'COMMIT_CHANGES' : 'SAVE_TO_VAULT',
+                          isLarge: true,
+                          onPressed: _isLoading ? () {} : _savePrompt,
+                        ),
+                        if (isEditing)
+                          ActionBlockButton(
+                            text: 'DELETE',
+                            color: BrutalistColors.error,
+                            onPressed: _deletePrompt,
+                          ),
+                      ],
+                    ),
+                ],
+              ),
             ),
-            const SizedBox(height: 40),
-            ActionBlockButton(
-              text: isEditing ? 'COMMIT_CHANGES' : 'SAVE_TO_VAULT',
-              onPressed: _isLoading ? () {} : _savePrompt,
-            ),
-            if (isEditing) ...[
-              const SizedBox(height: 24),
-              Row(
+          ),
+          
+          // Desktop Sidebar
+          if (isDesktop)
+            Container(
+              width: 300,
+              decoration: const BoxDecoration(
+                border: Border(left: BorderSide(color: BrutalistColors.black, width: 3)),
+                color: BrutalistColors.surfaceVariant,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: ActionBlockButton(
-                      text: 'ARCHIVE',
-                      color: BrutalistColors.concrete,
-                      onPressed: _archivePrompt,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ActionBlockButton(
-                      text: 'DELETE',
-                      color: BrutalistColors.tertiary,
-                      onPressed: _deletePrompt,
+                  _SidebarHeader(title: 'METADATA_CORE'),
+                  _SidebarStatRow(label: 'TOKEN_LIMIT', value: '4,096'),
+                  _SidebarStatRow(label: 'LATENCY', value: '142ms'),
+                  _SidebarStatRow(label: 'COST_EST', value: '\$0.002'),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: BentoCard(
+                      title: 'SYSTEM_LOG',
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Text(
+                          'READY_FOR_COMMMIT\nCHECKSUM: OK\nUSER_ID: 0092',
+                          style: GoogleFonts.jetBrainsMono(fontSize: 10, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ],
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
@@ -173,6 +261,7 @@ class _PromptEditorScreenState extends State<PromptEditorScreen> {
         category: _categoryController.text,
         aiModel: 'gemini-2.5-flash',
         isArchived: widget.prompt?.isArchived ?? false,
+        competitionId: widget.competitionId ?? widget.prompt?.competitionId,
       );
 
       if (widget.prompt != null) {
@@ -230,6 +319,60 @@ class _PromptEditorScreenState extends State<PromptEditorScreen> {
         shape: const RoundedRectangleBorder(
           side: BorderSide(color: Colors.black, width: 4),
         ),
+      ),
+    );
+  }
+}
+
+class _SidebarHeader extends StatelessWidget {
+  final String title;
+  const _SidebarHeader({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: const BoxDecoration(
+        color: BrutalistColors.black,
+        border: Border(bottom: BorderSide(color: Colors.white, width: 1)),
+      ),
+      child: Text(
+        title.toUpperCase(),
+        style: GoogleFonts.spaceGrotesk(
+          fontWeight: FontWeight.w900,
+          fontSize: 12,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
+
+class _SidebarStatRow extends StatelessWidget {
+  final String label;
+  final String value;
+  const _SidebarStatRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: BrutalistColors.black, width: 1)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700, fontSize: 10),
+          ),
+          Text(
+            value,
+            style: GoogleFonts.jetBrainsMono(fontWeight: FontWeight.w900, fontSize: 10, color: BrutalistColors.secondary),
+          ),
+        ],
       ),
     );
   }

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/brutalist_theme.dart';
 import '../widgets/brutalist_widgets.dart';
+import '../services/theme_service.dart';
+import '../services/user_session.dart';
+import 'auth/sign_in_screen.dart';
+
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -49,30 +53,33 @@ class SettingsScreen extends StatelessWidget {
                         child: const Icon(Icons.person, size: 48),
                       ),
                       const SizedBox(width: 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'ADMIN_01',
-                            style: GoogleFonts.spaceGrotesk(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 24,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              (UserSession().username ?? 'UNKNOWN_USER').toUpperCase(),
+                              style: GoogleFonts.spaceGrotesk(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 24,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                          const IndustrialChip(
-                            text: 'SENIOR ARCHIVIST',
-                            color: BrutalistColors.tertiary,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Joined: 2024_APR_18',
-                            style: GoogleFonts.jetBrainsMono(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black.withOpacity(0.5),
+                            IndustrialChip(
+                              text: (UserSession().rank ?? 'JUNIOR ARCHIVIST').toUpperCase(),
+                              color: BrutalistColors.primaryContainer,
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 4),
+                            Text(
+                              UserSession().email ?? 'No Network Identify',
+                              style: GoogleFonts.jetBrainsMono(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -113,7 +120,7 @@ class SettingsScreen extends StatelessWidget {
               // UI Preferences
               BentoCard(
                 title: 'INTERFACE_STYLING',
-                headerColor: BrutalistColors.tertiary,
+                headerColor: BrutalistColors.primaryContainer,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -127,14 +134,31 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _ColorBox(color: BrutalistColors.primary, isActive: true),
-                          _ColorBox(color: BrutalistColors.secondary),
-                          _ColorBox(color: BrutalistColors.tertiary),
-                          _ColorBox(color: Colors.black),
-                        ],
+                      ValueListenableBuilder<Color>(
+                        valueListenable: ThemeService().accentColor,
+                        builder: (context, currentAccent, _) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              _ColorBox(
+                                color: BrutalistColors.primary,
+                                isActive: currentAccent == BrutalistColors.primary,
+                              ),
+                              _ColorBox(
+                                color: BrutalistColors.secondary,
+                                isActive: currentAccent == BrutalistColors.secondary,
+                              ),
+                              _ColorBox(
+                                color: BrutalistColors.primaryContainer,
+                                isActive: currentAccent == BrutalistColors.primaryContainer,
+                              ),
+                              _ColorBox(
+                                color: Colors.black,
+                                isActive: currentAccent == Colors.black,
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -144,8 +168,14 @@ class SettingsScreen extends StatelessWidget {
 
               ActionBlockButton(
                 text: 'TERMINATE_SESSION (LOGOUT)',
-                color: BrutalistColors.tertiary,
-                onPressed: () {},
+                color: BrutalistColors.error,
+                onPressed: () {
+                  UserSession().clear();
+                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const SignInScreen()),
+                    (route) => false,
+                  );
+                },
               ),
               const SizedBox(height: 40),
             ],
@@ -172,11 +202,14 @@ class _SettingsToggle extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: GoogleFonts.jetBrainsMono(
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
+        Expanded(
+          child: Text(
+            label,
+            style: GoogleFonts.jetBrainsMono(
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         Switch(
@@ -198,17 +231,21 @@ class _ColorBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: color,
-        border: Border.all(
-          color: BrutalistColors.black,
-          width: isActive ? 4 : 2,
+    return GestureDetector(
+      onTap: () => ThemeService().updateAccentColor(color),
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color,
+          border: Border.all(
+            color: BrutalistColors.black,
+            width: isActive ? 4 : 2,
+          ),
         ),
+        child: isActive ? const Icon(Icons.check, color: Colors.white, size: 20) : null,
       ),
-      child: isActive ? const Icon(Icons.check, color: Colors.white, size: 20) : null,
     );
   }
 }
+

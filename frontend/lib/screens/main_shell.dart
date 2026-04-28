@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/bottom_nav_archivist.dart';
 import 'dashboard_screen.dart';
 import 'prompt_editor_screen.dart';
+import 'competition_screen.dart';
 import 'archive_screen.dart';
 import 'settings_screen.dart';
 import '../theme/brutalist_theme.dart';
@@ -19,6 +20,7 @@ class _MainShellState extends State<MainShell> {
   final List<Widget> _screens = [
     const DashboardScreen(),
     const PromptEditorScreen(),
+    const CompetitionScreen(),
     const ArchiveScreen(),
     const SettingsScreen(),
   ];
