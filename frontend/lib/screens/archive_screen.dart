@@ -175,20 +175,45 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
 
   Widget _buildEmptyState() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Opacity(opacity: 0.1, child: Icon(Icons.inventory_2_outlined, size: 80)),
-          const SizedBox(height: 24),
-          Text(
-            'VAULT_EMPTY',
-            style: GoogleFonts.spaceGrotesk(
-              fontWeight: FontWeight.w900,
-              fontSize: 24,
-              color: Colors.black26,
+      child: Container(
+        padding: const EdgeInsets.all(48),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black12, width: 3),
+              ),
+              child: const Icon(
+                Icons.inventory_2_outlined,
+                size: 64,
+                color: Colors.black12,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 32),
+            Text(
+              'VAULT_EMPTY',
+              style: GoogleFonts.spaceGrotesk(
+                fontWeight: FontWeight.w900,
+                fontSize: 28,
+                color: Colors.black26,
+                letterSpacing: -1,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Archived prompts will appear here.\nArchive prompts from the Dashboard to store them.',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.spaceGrotesk(
+                fontWeight: FontWeight.w500,
+                fontSize: 13,
+                color: Colors.black38,
+                height: 1.6,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -5,8 +5,8 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
 
+// API routes (must be defined BEFORE the catch-all)
 $routes->group('api', ['namespace' => 'App\Controllers\Api'], function($routes) {
     // Prompts
     $routes->resource('prompts', ['controller' => 'PromptController']);
@@ -22,7 +22,15 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function($routes) 
     // AI
     $routes->post('refine', 'RefineController::create');
 
+    // Upload
+    $routes->post('upload-image', 'UploadController::image');
+
     // Competitions
     $routes->get('competitions', 'CompetitionController::index');
     $routes->get('competitions/(:num)', 'CompetitionController::show/$1');
 });
+
+// Serve Flutter Web App
+$routes->get('/', 'WebApp::index');             // Redirect to /app/
+$routes->get('app', 'WebApp::serve');           // Serve Flutter
+$routes->get('app/(:any)', 'WebApp::serve');    // SPA catch-all for Flutter routing

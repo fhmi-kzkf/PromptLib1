@@ -78,6 +78,7 @@ class PromptController extends ResourceController
             'category' => $this->request->getVar('category'),
             'ai_model' => $this->request->getVar('ai_model') ?? 'gemini-2.5-flash-lite',
             'user_id'  => $this->request->getVar('user_id'),
+            'image_url' => $this->request->getVar('image_url'),
             'competition_id' => $this->request->getVar('competition_id'),
         ];
 
@@ -99,7 +100,11 @@ class PromptController extends ResourceController
      */
     public function update($id = null)
     {
-        $data = $this->request->getRawInput();
+        $data = $this->request->getJSON(true);
+        if (empty($data)) {
+            $data = $this->request->getRawInput();
+        }
+        
         if (!$this->model->find($id)) {
             return $this->failNotFound('Prompt not found');
         }

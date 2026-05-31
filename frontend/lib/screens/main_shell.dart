@@ -17,13 +17,16 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const DashboardScreen(),
-    const PromptEditorScreen(),
-    const CompetitionScreen(),
-    const ArchiveScreen(),
-    const SettingsScreen(),
-  ];
+  // Keys to refresh DashboardScreen when posting
+  final GlobalKey<DashboardScreenState> _dashboardKey = GlobalKey<DashboardScreenState>();
+
+  void _switchToDashboard() {
+    setState(() {
+      _currentIndex = 0;
+    });
+    // Refresh dashboard prompts
+    _dashboardKey.currentState?.refreshPrompts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,13 @@ class _MainShellState extends State<MainShell> {
       body: SafeArea(
         child: IndexedStack(
           index: _currentIndex,
-          children: _screens,
+          children: [
+            DashboardScreen(key: _dashboardKey),
+            PromptEditorScreen(onPostSuccess: _switchToDashboard),
+            const CompetitionScreen(),
+            const ArchiveScreen(),
+            const SettingsScreen(),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavArchivist(

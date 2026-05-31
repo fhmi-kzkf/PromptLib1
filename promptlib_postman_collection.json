@@ -1,0 +1,154 @@
+{
+  "info": {
+    "name": "PromptLib API Testing",
+    "description": "Collection for testing CRUD operations on PromptLib Prompts",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. GET All Prompts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/prompts",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "prompts"
+          ]
+        },
+        "description": "Retrieve all prompts."
+      },
+      "response": []
+    },
+    {
+      "name": "2. POST Create Prompt",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Sample Prompt for Testing\",\n    \"content\": \"Write a beautiful poem about software testing.\",\n    \"category\": \"Creative Writing\",\n    \"ai_model\": \"gemini-1.5-pro\",\n    \"user_id\": 1\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/prompts",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "prompts"
+          ]
+        },
+        "description": "Create a new prompt."
+      },
+      "response": []
+    },
+    {
+      "name": "3. GET Single Prompt",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/prompts/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "prompts",
+            "1"
+          ]
+        },
+        "description": "Get a specific prompt by ID. Change the ID '1' to an existing ID from the GET All response."
+      },
+      "response": []
+    },
+    {
+      "name": "4. PUT Update Prompt",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Updated Sample Prompt\",\n    \"content\": \"Write a beautiful poem about software testing and quality assurance.\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/prompts/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "prompts",
+            "1"
+          ]
+        },
+        "description": "Update an existing prompt. Ensure the ID in the URL exists."
+      },
+      "response": []
+    },
+    {
+      "name": "5. DELETE Prompt",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/prompts/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "prompts",
+            "1"
+          ]
+        },
+        "description": "Delete a prompt by its ID."
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost/promptlib/backend/public",
+      "type": "string"
+    }
+  ]
+}

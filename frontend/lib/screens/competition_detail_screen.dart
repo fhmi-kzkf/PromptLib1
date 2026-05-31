@@ -153,7 +153,7 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
         final colors = [const Color(0xFFFFD700), const Color(0xFFC0C0C0), const Color(0xFFCD7F32)];
         
         return Padding(
-          padding: const EdgeInsets.bottom(16.0),
+          padding: const EdgeInsets.only(bottom: 16.0),
           child: BentoCard(
             title: 'RANK #${index + 1}',
             headerColor: colors[index],
@@ -180,7 +180,7 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
 
   Widget _buildEntryCard(Prompt prompt) {
     return Padding(
-      padding: const EdgeInsets.bottom(16.0),
+      padding: const EdgeInsets.only(bottom: 16.0),
       child: BentoCard(
         title: prompt.title,
         backgroundColor: Colors.white,

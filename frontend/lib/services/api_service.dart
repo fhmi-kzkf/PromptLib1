@@ -1,11 +1,27 @@
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../models/prompt_model.dart';
 import '../models/competition_model.dart';
 import 'user_session.dart';
 
 class ApiService {
+  // Dynamically resolve the API base URL from the browser's current location.
+  // When a friend opens http://192.168.1.66:8080 from their phone,
+  // API calls will automatically target http://192.168.1.66:8080/api.
+  static String _resolveBaseUrl() {
+    if (kIsWeb) {
+      // Uri.base gives us the current page URL on web
+      final host = Uri.base.host;
+      final port = 8080;
+      return 'http://$host:$port/api';
+    }
+    return 'http://localhost:8080/api';
+  }
+
   final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'http://localhost:8080/api', // Default CI4 port
+    baseUrl: _resolveBaseUrl(),
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -16,6 +32,9 @@ class ApiService {
   static final ApiService _instance = ApiService._internal();
   factory ApiService() => _instance;
   ApiService._internal();
+
+  /// Public getter for the resolved base URL (used for constructing image URLs)
+  String get baseUrl => _dio.options.baseUrl;
 
   // --- Competitions ---
 
@@ -151,6 +170,38 @@ class ApiService {
       throw Exception(e.message ?? 'Unknown Register Error');
     } catch (e) {
       throw Exception(e.toString());
+    }
+  }
+
+  // --- Upload ---
+
+  /// Upload an image file. Returns the server-relative image URL.
+  Future<String> uploadImage({
+    required Uint8List bytes,
+    required String fileName,
+  }) async {
+    try {
+      final ext = fileName.split('.').last.toLowerCase();
+      final mimeType = (ext == 'jpg' || ext == 'jpeg') ? 'jpeg' : 'png';
+      
+      final formData = FormData.fromMap({
+        'image': MultipartFile.fromBytes(
+          bytes,
+          filename: fileName,
+          contentType: MediaType('image', mimeType),
+        ),
+      });
+      final response = await _dio.post(
+        '/upload-image',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
+      return response.data['image_url'];
+    } catch (e) {
+      if (e is DioException) {
+        throw Exception(e.response?.data?['messages']?['error'] ?? e.message);
+      }
+      rethrow;
     }
   }
 

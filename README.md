@@ -30,23 +30,31 @@ PromptLib is a high-performance, Neo-Brutalist prompt management vault designed 
 
 ---
 
-## 🚀 DEPLOYMENT_SEQUENCE
+## 🚀 DEPLOYMENT_SEQUENCE (UNIFIED)
 
-### 1. BACKEND_INITIALIZATION
+The frontend (Flutter Web) is pre-built and served directly by the CodeIgniter 4 backend as a Single Page Application (SPA). You do **not** need to run two separate servers.
+
+### 1. RUN_VIA_SCRIPT (WINDOWS)
+Just double-click the included batch script at the root of the project:
+```bash
+deploy_lan.bat
+```
+This will start the server and bind it to `0.0.0.0` so it can be accessed across your local network.
+
+### 2. RUN_VIA_TERMINAL
+If you prefer running it manually:
 ```bash
 cd backend
-composer install
-cp .env.example .env # Configure your DB credentials
-php spark migrate
-php spark serve --port 8080
+php spark serve --host 0.0.0.0 --port 8080
 ```
 
-### 2. FRONTEND_INITIALIZATION
-```bash
-cd frontend
-flutter pub get
-flutter run -d chrome
-```
+### 🌐 LAN & MOBILE HOTSPOT ACCESS
+This app is designed for **Interoperability**. You can host it on your laptop and let your friends access it via their phones without an internet connection:
+1. Turn on **Mobile Hotspot** on your phone (or connect both devices to the same WiFi).
+2. Connect the laptop (Server) to that hotspot.
+3. Find your laptop's IPv4 Address (e.g., `192.168.43.xxx`).
+4. Run the server (`deploy_lan.bat`).
+5. Your friends can access the app from their phone browsers at: `http://192.168.43.xxx:8080/app/`
 
 ---
 
