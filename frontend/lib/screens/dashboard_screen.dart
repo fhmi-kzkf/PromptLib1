@@ -21,6 +21,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   List<Prompt> _cachedPrompts = [];
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  String _selectedCategory = 'ALL';
 
   @override
   void initState() {
@@ -34,11 +35,14 @@ class DashboardScreenState extends State<DashboardScreen> {
     super.dispose();
   }
 
-  /// Public method so MainShell can trigger a refresh after posting
   void refreshPrompts() {
     setState(() {
       _promptsFuture = ApiService().getPrompts().then((data) {
-        _cachedPrompts = data;
+        if (mounted) {
+          setState(() {
+            _cachedPrompts = data;
+          });
+        }
         return data;
       });
     });
@@ -111,21 +115,39 @@ class DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  void _copyToClipboard(String text) {
-    Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'PROMPT_COPIED_TO_CLIPBOARD',
-          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w900, color: Colors.black),
+  void _copyToClipboard(String text) async {
+    try {
+      await Clipboard.setData(ClipboardData(text: text));
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'PROMPT_COPIED_TO_CLIPBOARD',
+            style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w900, color: Colors.black),
+          ),
+          backgroundColor: BrutalistColors.primaryContainer,
+          behavior: SnackBarBehavior.floating,
+          shape: const RoundedRectangleBorder(
+            side: BorderSide(color: Colors.black, width: 4),
+          ),
         ),
-        backgroundColor: BrutalistColors.primaryContainer,
-        behavior: SnackBarBehavior.floating,
-        shape: const RoundedRectangleBorder(
-          side: BorderSide(color: Colors.black, width: 4),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'CLIPBOARD DENIED (HTTP). PLEASE CLICK "OPEN" TO COPY.',
+            style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w900, color: Colors.white),
+          ),
+          backgroundColor: BrutalistColors.error,
+          behavior: SnackBarBehavior.floating,
+          shape: const RoundedRectangleBorder(
+            side: BorderSide(color: Colors.black, width: 4),
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   /// Uniform action row for ALL card types: Vote + COPY + OPEN
@@ -182,6 +204,44 @@ class DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  Widget _buildFilterChips() {
+    if (_cachedPrompts.isEmpty) return const SizedBox.shrink();
+
+    // Extract unique categories
+    final Set<String> uniqueCategories = {'ALL'};
+    for (var p in _cachedPrompts) {
+      if (p.category.trim().isNotEmpty) {
+        uniqueCategories.add(p.category.toUpperCase());
+      }
+    }
+
+    final categories = uniqueCategories.toList();
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width < 600 ? 16 : 24,
+      ),
+      child: Row(
+        children: categories.map((cat) {
+          final isSelected = _selectedCategory == cat;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: GestureDetector(
+              onTap: () {
+                setState(() => _selectedCategory = cat);
+              },
+              child: IndustrialChip(
+                text: cat,
+                color: isSelected ? BrutalistColors.primaryContainer : Colors.white,
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -192,7 +252,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         Padding(
           padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width < 600 ? 16 : 24,
-            vertical: MediaQuery.of(context).size.width < 600 ? 20 : 32,
+            vertical: MediaQuery.of(context).size.width < 600 ? 12 : 16,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,13 +264,13 @@ class DashboardScreenState extends State<DashboardScreen> {
                   'DASHBOARD',
                   style: GoogleFonts.spaceGrotesk(
                     fontWeight: FontWeight.w900,
-                    fontSize: 48,
+                    fontSize: 36,
                     letterSpacing: -2,
                     color: BrutalistColors.black,
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
               IndustrialInput(
                 label: 'SEARCH_DATABASE',
                 hint: 'SEARCH_PROMPTS...',
@@ -223,6 +283,10 @@ class DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
 
+        // Filter Chips
+        _buildFilterChips(),
+        const SizedBox(height: 16),
+
         // Prompts Content
         Expanded(
           child: FutureBuilder<List<Prompt>>(
@@ -233,9 +297,11 @@ class DashboardScreenState extends State<DashboardScreen> {
               }
 
               final displayPrompts = _cachedPrompts.where((p) {
-                return p.title.toLowerCase().contains(_searchQuery) ||
+                final matchesSearch = p.title.toLowerCase().contains(_searchQuery) ||
                        p.content.toLowerCase().contains(_searchQuery) ||
                        p.category.toLowerCase().contains(_searchQuery);
+                final matchesCategory = _selectedCategory == 'ALL' || p.category.toUpperCase() == _selectedCategory;
+                return matchesSearch && matchesCategory;
               }).toList();
 
               if (displayPrompts.isEmpty) {

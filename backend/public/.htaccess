@@ -1,3 +1,9 @@
+# Mencegah akses langsung ke file .env dan file tersembunyi lainnya
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
 # Disable directory browsing
 Options -Indexes
 

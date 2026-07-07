@@ -12,7 +12,7 @@ class PromptModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['title', 'content', 'category', 'ai_model', 'image_url', 'user_id', 'is_archived', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['title', 'content', 'category', 'ai_model', 'image_url', 'user_id', 'is_archived', 'competition_id', 'created_at', 'updated_at'];
 
 
     protected bool $allowEmptyInserts = false;

@@ -506,7 +506,7 @@ class _PromptEditorScreenState extends State<PromptEditorScreen> with TickerProv
         // POST_TO_DASHBOARD — available for all logged-in users
         if (isLoggedIn && !isEditing)
           ActionBlockButton(
-            text: _isLoading ? 'POSTING...' : 'POST_TO_DASHBOARD',
+            text: _isLoading ? 'POSTING...' : (widget.competitionId != null ? 'SUBMIT_TO_BATTLE' : 'POST_TO_DASHBOARD'),
             isLarge: true,
             color: BrutalistColors.primaryContainer,
             icon: Icons.publish,
@@ -656,10 +656,11 @@ class _PromptEditorScreenState extends State<PromptEditorScreen> with TickerProv
         category: _categoryController.text,
         aiModel: 'gemini-2.5-flash',
         imageUrl: imageUrl,
+        competitionId: widget.competitionId,
       );
 
       await ApiService().createPrompt(prompt);
-      _showSnackbar('Prompt posted to dashboard!');
+      _showSnackbar(widget.competitionId != null ? 'Entry submitted to battle!' : 'Prompt posted to dashboard!');
 
       // Navigate back or switch to dashboard
       if (widget.onPostSuccess != null) {

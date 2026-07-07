@@ -3,9 +3,11 @@ import 'theme/brutalist_theme.dart';
 import 'screens/main_shell.dart';
 import 'screens/auth/sign_in_screen.dart';
 import 'services/theme_service.dart';
+import 'services/user_session.dart';
 
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await UserSession().init();
   runApp(const PromptLibApp());
 }
 
@@ -21,8 +23,8 @@ class PromptLibApp extends StatelessWidget {
           title: 'PromptLib',
           debugShowCheckedModeBanner: false,
           theme: BrutalistTheme.getDynamicTheme(accentColor),
-          // Start at login screen — user must authenticate first
-          home: const SignInScreen(),
+          // Start at MainShell if logged in, otherwise SignInScreen
+          home: UserSession().isLoggedIn ? const MainShell() : const SignInScreen(),
         );
       },
     );

@@ -12,12 +12,10 @@ class ApiService {
   // API calls will automatically target http://192.168.1.66:8080/api.
   static String _resolveBaseUrl() {
     if (kIsWeb) {
-      // Uri.base gives us the current page URL on web
-      final host = Uri.base.host;
-      final port = 8080;
-      return 'http://$host:$port/api';
+      // Use the exact origin of the current web page, and append /api
+      return '${Uri.base.origin}/api';
     }
-    return 'http://localhost:8080/api';
+    return 'https://w3tqclq0-8080.asse.devtunnels.ms/api';
   }
 
   final Dio _dio = Dio(BaseOptions(
@@ -25,6 +23,7 @@ class ApiService {
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      'Bypass-Tunnel-Reminder': 'true',
     },
   ));
 
@@ -49,7 +48,8 @@ class ApiService {
 
   Future<Competition> getCompetitionDetails(int id) async {
     try {
-      final response = await _dio.get('/competitions/$id');
+      final params = {'_t': DateTime.now().millisecondsSinceEpoch};
+      final response = await _dio.get('/competitions/$id', queryParameters: params);
       return Competition.fromJson(response.data);
     } catch (e) {
       rethrow;

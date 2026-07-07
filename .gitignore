@@ -42,3 +42,9 @@ frontend/node_modules/
 # [ TEMP_FILES ]
 /tmp/
 /scratch/
+
+# [ LARGE BINARIES & UPLOADS ]
+android_sdk/
+*.zip
+backend/public/uploads/images/
+backend/test_db.php

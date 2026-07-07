@@ -5,6 +5,7 @@ import '../models/prompt_model.dart';
 import '../services/api_service.dart';
 import '../widgets/brutalist_widgets.dart';
 import '../theme/brutalist_theme.dart';
+import 'prompt_editor_screen.dart';
 
 class ArchiveScreen extends StatefulWidget {
   const ArchiveScreen({super.key});
@@ -47,7 +48,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'ARCHIVE_VAULT',
+                'MY_VAULT',
                 style: GoogleFonts.spaceGrotesk(
                   fontWeight: FontWeight.w900,
                   fontSize: 48,
@@ -57,7 +58,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
               ),
               const SizedBox(height: 12),
               const IndustrialChip(
-                text: 'RESTRICTED ACCESS',
+                text: 'YOUR PERSONAL RECORDS',
                 color: BrutalistColors.secondary,
               ),
               const SizedBox(height: 24),
@@ -134,29 +135,45 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                           decoration: const BoxDecoration(
                             color: BrutalistColors.black,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                          child: Wrap(
+                            alignment: WrapAlignment.end,
+                            spacing: 8,
+                            runSpacing: 8,
                             children: [
-                              Flexible(
-                                child: ActionBlockButton(
-                                  text: 'RESTORE',
-                                  color: BrutalistColors.primaryContainer,
-                                  onPressed: () async {
+                              ActionBlockButton(
+                                text: prompt.isArchived ? 'UNARCHIVE' : 'ARCHIVE',
+                                color: BrutalistColors.surfaceVariant,
+                                isCompact: true,
+                                onPressed: () async {
+                                  if (prompt.isArchived) {
                                     await ApiService().restorePrompt(prompt.id!);
-                                    _refreshArchived();
-                                  },
-                                ),
+                                  } else {
+                                    await ApiService().archivePrompt(prompt.id!);
+                                  }
+                                  _refreshArchived();
+                                },
                               ),
-                              const SizedBox(width: 12),
-                              Flexible(
-                                child: ActionBlockButton(
-                                  text: 'PURGE',
-                                  color: BrutalistColors.error,
-                                  onPressed: () async {
-                                    await ApiService().deletePrompt(prompt.id!);
-                                    _refreshArchived();
-                                  },
-                                ),
+                              ActionBlockButton(
+                                text: 'EDIT',
+                                color: BrutalistColors.primaryContainer,
+                                isCompact: true,
+                                onPressed: () async {
+                                  final result = await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => PromptEditorScreen(prompt: prompt),
+                                    ),
+                                  );
+                                  if (result == true) _refreshArchived();
+                                },
+                              ),
+                              ActionBlockButton(
+                                text: 'PURGE',
+                                color: BrutalistColors.error,
+                                isCompact: true,
+                                onPressed: () async {
+                                  await ApiService().deletePrompt(prompt.id!);
+                                  _refreshArchived();
+                                },
                               ),
                             ],
                           ),
@@ -203,7 +220,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              'Archived prompts will appear here.\nArchive prompts from the Dashboard to store them.',
+              'Prompts you create will appear here.\nManage your personal records and archived prompts.',
               textAlign: TextAlign.center,
               style: GoogleFonts.spaceGrotesk(
                 fontWeight: FontWeight.w500,

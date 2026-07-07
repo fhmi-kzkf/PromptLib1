@@ -32,7 +32,19 @@ class PromptController extends ResourceController
         }
 
         $builder->join('users', 'users.id = prompts.user_id', 'left');
-        $builder->where('prompts.is_archived', $showArchived ? 1 : 0);
+        
+        if ($showArchived) {
+            if ($currentUserId) {
+                $builder->where('prompts.user_id', $currentUserId);
+            } else {
+                // If no user is logged in, return empty for archive
+                $builder->where('prompts.user_id', -1);
+            }
+        } else {
+            $builder->where('prompts.is_archived', 0);
+        }
+        
+        $builder->where('prompts.competition_id IS NULL');
         $builder->orderBy('vote_count', 'DESC');
         $builder->orderBy('prompts.created_at', 'DESC');
 

@@ -220,9 +220,30 @@ class IndustrialInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Label placed clearly above the input box
+        Padding(
+          padding: const EdgeInsets.only(left: 4.0, bottom: 8.0),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: BrutalistColors.primaryContainer,
+              border: Border.all(color: BrutalistColors.black, width: 2),
+            ),
+            child: Text(
+              label.toUpperCase(),
+              style: GoogleFonts.spaceGrotesk(
+                fontWeight: FontWeight.w900,
+                fontSize: 12,
+                letterSpacing: 1,
+                color: BrutalistColors.black,
+              ),
+            ),
+          ),
+        ),
+        // Input Box
         Container(
           decoration: BrutalistTheme.getShadowDecoration(
             color: readOnly ? BrutalistColors.background : Colors.white,
@@ -246,30 +267,10 @@ class IndustrialInput extends StatelessWidget {
                 color: BrutalistColors.outlineVariant,
                 fontWeight: FontWeight.w500,
               ),
-              contentPadding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               border: InputBorder.none,
               filled: true,
               fillColor: readOnly ? BrutalistColors.background : Colors.white,
-            ),
-          ),
-        ),
-        Positioned(
-          top: -12,
-          left: 16,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: BrutalistColors.black, width: 2),
-            ),
-            child: Text(
-              label.toUpperCase(),
-              style: GoogleFonts.spaceGrotesk(
-                fontWeight: FontWeight.w900,
-                fontSize: 10,
-                letterSpacing: 1,
-                color: BrutalistColors.black,
-              ),
             ),
           ),
         ),

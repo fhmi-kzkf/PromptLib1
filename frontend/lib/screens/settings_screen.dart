@@ -169,8 +169,9 @@ class SettingsScreen extends StatelessWidget {
               ActionBlockButton(
                 text: 'TERMINATE_SESSION (LOGOUT)',
                 color: BrutalistColors.error,
-                onPressed: () {
-                  UserSession().clear();
+                onPressed: () async {
+                  await UserSession().clear();
+                  if (!context.mounted) return;
                   Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => const SignInScreen()),
                     (route) => false,

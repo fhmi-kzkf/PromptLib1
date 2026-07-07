@@ -24,8 +24,11 @@ class CompetitionController extends ResourceController
     public function show($id = null)
     {
         $db = \Config\Database::connect();
-        $comp = $db->table('competitions')->where('id', $id)->get()->getRowArray();
-        
+        $builder = $db->table('competitions');
+        $builder->select('competitions.*');
+        $builder->select('(SELECT COUNT(*) FROM prompts WHERE prompts.competition_id = competitions.id) as entry_count');
+        $builder->where('id', $id);
+        $comp = $builder->get()->getRowArray();        
         if (!$comp) {
             return $this->failNotFound('Competition not found');
         }
